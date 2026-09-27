@@ -1,0 +1,10 @@
+# Whitelist: this repo only carries the published deck, nothing else from the
+# workshop directory (talk script, demo app, third-party references, venvs).
+/*
+!/.gitignore
+!/.github/
+!/README.md
+!/build-pdf.py
+!/support.js
+!/Live Prompt Injection.dc.html
+!/Live Prompt Injection.pdf

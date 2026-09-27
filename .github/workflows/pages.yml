@@ -1,0 +1,40 @@
+name: Deploy slides to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # The deck keeps its authored filename in the repo; Pages needs index.html.
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp "Live Prompt Injection.dc.html" _site/index.html
+          cp support.js                      _site/support.js
+          cp "Live Prompt Injection.pdf"     _site/slides.pdf
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
